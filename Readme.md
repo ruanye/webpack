@@ -1,8 +1,8 @@
 ## webpack 安装 
-安装本地的webpack 
-yarn add webpack webpack-cli -D  
-npm install webpack webpack-cli -D
--D 表示development  开发环境 
+- 安装本地的webpack 
+- yarn add webpack webpack-cli -D  
+- npm install webpack webpack-cli -D
+- -D 表示development  开发环境 
 
 ## webpack 可以进行0配置
 - 直接运行 npx webpack 
