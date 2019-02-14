@@ -1,7 +1,6 @@
 ## webpack 安装 
 - 安装本地的webpack 
 - yarn add webpack webpack-cli -D  
-- npm install webpack webpack-cli -D
 - -D 表示development  开发环境 
 
 ## webpack 可以进行0配置
@@ -12,7 +11,7 @@
 
 ## 手动配置webpack 
 - 默认配置文件的名字是webpack.config.js
-- webpack 是node写出来的 
+- webpack 是基于node编写的
 
 ## 配置脚本命令 package.json 
 - "build": "webpack --config webpack.config.js",
@@ -41,8 +40,6 @@ production
  compress:true  #是否开启gzip压缩
 ```
 
-
-
 ## 处理html 
 -  yarn add  html-webpack-plugin -D 
 - 在src目录下面建一个index.html
@@ -51,19 +48,21 @@ production
 - 可以运行npm run dev/npm run build 查看结果
 
 ```
-template:'./src/index.html',//模板
-filename:'index.html', //编译后的文件名 
-hash:true,//加hash值 
-minify:{ //压缩配置   
+{
+  template:'./src/index.html',//模板
+  filename:'index.html', //编译后的文件名 
+  hash:true,//加hash值 
+  minify:{ //压缩配置   
     removeAttributeQuotes:true, //去除双引号
     collapseWhitespace: true,  //折叠去除空格
+  }
 }
 ```
 
 ## 直接给文件加hash值 
 ```
 filename:'bundle[hash].js'
-可以用数字设置hash值的长短 
+可以用:后面跟数字设置hash值的长度
 filename:'bundle[hash:8].js'
 ```
 
