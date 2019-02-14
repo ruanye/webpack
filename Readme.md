@@ -14,12 +14,20 @@
 - 默认配置文件的名字是webpack.config.js
 - webpack 是node写出来的 
 
-## 配置出口入口以及打包环境
+## 配置脚本命令 package.json 
+- "build": "webpack --config webpack.config.js",
+- "dev": "webpack-dev-server"
+- 这样就可以通过npm run dev/npm run build执行相关的命令
+
+## 配置出口入口
 - entry 入口 可以是相对路径 
 - output 出口 输出 
    - path 输出路径 必须是绝对路径
-   - filename: 输出的文件名字  
-- mode 的值 一般是2个值 development和 production 
+   - filename: 输出的文件名字
+
+## 配置打包环境  
+- mode 的值 一般是2个值 development和 
+production 
  1. development 开发环境
  2. production 生产环境 
 如果不配置，默认是生产环境 
@@ -33,21 +41,23 @@
  compress:true  #是否开启gzip压缩
 ```
 
-## 配置脚本 package.json 
-- "build": "webpack --config webpack.config.js",
-- "dev": "webpack-dev-server"
-- 这样就可以通过npm run dev/npm run build执行相关的命令
+
 
 ## 处理html 
--  yarn add  html-webpack-plugin
+-  yarn add  html-webpack-plugin -D 
+- 在src目录下面建一个index.html
+- 当有插件的时候需要配置plugins 插件集合类型是数组
+- 每一个插件都是通过new来调用，例：new HtmlWebpackPlugin()
+- 可以运行npm run dev/npm run build 查看结果
+
 ```
 template:'./src/index.html',//模板
-filename:'index.html', //编译后的名字
+filename:'index.html', //编译后的文件名 
 hash:true,//加hash值 
 minify:{ //压缩配置   
     removeAttributeQuotes:true, //去除双引号
-    collapseWhitespace: true,  //去除空格
-     }
+    collapseWhitespace: true,  //折叠去除空格
+}
 ```
 
 ## 直接给文件加hash值 
@@ -56,6 +66,7 @@ filename:'bundle[hash].js'
 可以用数字设置hash值的长短 
 filename:'bundle[hash:8].js'
 ```
+
 ## 处理样式
 - . 通过require require('/index.css') 报错如下 
 
@@ -77,7 +88,7 @@ yard add css-loader style-loader -D
  {
    loader:'style-loader',
     options:{
-     insertAt:'top'  //css 放置位置可以绝对css的优先级
+     insertAt:'top'  //css 放置位置可以决定css的优先级
   }
 ```
 - 配置less编译(less->css) 因为从右向左，从下到上执行 所以写在下边和右边
@@ -85,6 +96,11 @@ yarn add less less-loader -D
 
 ##  抽离css 
 - yarn add  mini-css-extract-plugin -D
+```
+  new MiniCssExtractPlugin({
+      filename: 'main.css'
+    })
+```
 
 ## 使用postcss添加浏览器前缀 
 - yarn add postcss-loader autoprefixer -D 
