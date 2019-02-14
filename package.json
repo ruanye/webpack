@@ -1,0 +1,20 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "dev": "webpack-dev-server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3"
+  },
+  "dependencies": {
+    "webpack-dev-server": "^3.1.14"
+  }
+}
