@@ -35,14 +35,19 @@ module.exports={
 			 {
 				test:/.css$/,
 				use:[
-				 MiniCssExtractPlugin.loader,
+				  {
+					
+					loader:"style-loader",
+					options:{
+						insertAt:'top'
+					}
+				  },
 				'css-loader'
 				]
 			 },
 			 {
 				 test:/.less$/,
-				 use:[     MiniCssExtractPlugin.loader,
-				 'css-loader','less-loader']
+				 use:['style-loader','css-loader','less-loader']
 			 }
 		 ]
 	 }
