@@ -4,10 +4,11 @@
 - -D 表示development  开发环境 
 
 ## webpack 可以进行0配置
+- 创建src文件夹 src目录下创建index.js
 - 直接运行 npx webpack 
 - 打包工具->输出后的结果(js模块)
 - 打包（直接js的模块化）
-- src 表示源码文件夹 
+
 
 ## 手动配置webpack 
 - 默认配置文件的名字是webpack.config.js
@@ -79,6 +80,8 @@ use后面的写法
 1. 字符串 只能写一个loader 
 use:'css-loader'
 2. 数组 可以写多个loader 
+css-loader 解析require/import 语法
+style-loader 把css插入到header标签中 
 use:['style-loader','css-loader']
 loader 的执行顺序是从右到左执行 从下到上 
 
@@ -106,18 +109,35 @@ stylus stylus-loader   -D
 
 ##  抽离css 
 - yarn add  mini-css-extract-plugin -D
+-  MiniCssExtractPlugin插件自带一个loader
+- MiniCssExtractPlugin.loader会自动把css抽离出来 
 ```
   new MiniCssExtractPlugin({
-      filename: 'main.css'
+      filename: 'main.css' ##抽离出来的css的文件名
     })
-  用  MiniCssExtractPlugin.loader 代替style-loader 可以对css进行抽离 
+  
+```
+- 在loader里面的写法
+```
+  {
+    test:/.css$/,
+     MiniCssExtractPlugin.loader,
+    'css-loader'
+  }
 ```
 
-## 使用postcss添加浏览器前缀 
+## 使用postcss-loader,autoprefixer添加浏览器前缀 
 - yarn add postcss-loader autoprefixer -D 
 - 放到所有cssloader后面，执行顺序原因
-- 需要配置postcss默认文件 名字postcss.config.js
 ```
+ npm run dev 的时候会报错
+ Error: No PostCSS Config found in: /Users/ruanye/Desktop/project/src
+ 没有找到postcss的默认文件 
+```
+- 需要配置postcss默认文件 名字
+在根目录下创建 postcss.config.js
+```
+postcss.config.js 文件里面的内容：
 module.exports={
     plugins:[require('autoprefixer')]
 }
@@ -125,16 +145,19 @@ module.exports={
 
 ## 配置优化项
 - yarn add optimize-css-assets-webpack-plugin  uglifyjs-webpack-plugin -D 
-optimization: {
+optimize : 优化 assets :资源 
+optimization: { 优化像 
     minimizer: [
       new UglifyJsPlugin({
         cache: true, //缓存 
         parallel: true, //是否并发打包
-        sourceMap: true // set to true if you want JS source maps
+        sourceMap: true // 源码映射
       }),
       new OptimizeCSSAssetsPlugin({})
     ]
   },
+- mode 改成production 
+- npm run build 打包之后 csss是压缩过的
 ## 处理js es6转化成es5
 - yarn add babel-loader @babel/core @babel/preset-env
 @babel/core babel 核心模块

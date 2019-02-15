@@ -2,8 +2,16 @@
 let path = require('path');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let MiniCssExtractPlugin  = require('mini-css-extract-plugin')
+let OptimizeCssAssetsWebpackplugin =require('optimize-css-assets-webpack-plugin')
+let UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin')
 //node和核心模块 路径模块 
 module.exports={
+	optimization:{
+		minimizer:[
+			new UglifyjsWebpackPlugin({}),
+			new OptimizeCssAssetsWebpackplugin({})
+		]
+	},
 	mode:'production',  
 	entry:'./src/index.js',
 	output:{
@@ -36,13 +44,15 @@ module.exports={
 				test:/.css$/,
 				use:[
 				 MiniCssExtractPlugin.loader,
-				'css-loader'
+				'css-loader',
+				'postcss-loader'
 				]
 			 },
 			 {
 				 test:/.less$/,
 				 use:[     MiniCssExtractPlugin.loader,
-				 'css-loader','less-loader']
+				 'css-loader',
+				 'postcss-loader','less-loader']
 			 }
 		 ]
 	 }
