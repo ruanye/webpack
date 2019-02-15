@@ -1,6 +1,7 @@
 //webpack 是node写的 
 let path = require('path');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
+let MiniCssExtractPlugin  = require('mini-css-extract-plugin')
 //node和核心模块 路径模块 
 module.exports={
 	mode:'production',  
@@ -24,6 +25,26 @@ module.exports={
 				 removeAttributeQuotes:true,
 				 collapseWhitespace:true
 			 }
+		 }),
+		 new MiniCssExtractPlugin({
+			 filename:'main.css'
 		 })
-	 ]
+	 ],
+	 module:{
+		 rules:[
+			 {
+				test:/.css$/,
+				use:[
+				 MiniCssExtractPlugin.loader, 
+				'css-loader'
+				]
+			 },
+			 {
+				 test:/.less$/,
+				 use:[
+					 MiniCssExtractPlugin.loader
+					 ,'css-loader','less-loader']
+			 }
+		 ]
+	 }
 }

@@ -1,3 +1,2 @@
-let str = require('./a')
-console.log(str)
-console.log(123456)
+require('./index.css')
+require('./b.less')

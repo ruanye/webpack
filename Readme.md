@@ -70,18 +70,25 @@ filename:'bundle[hash:8].js'
 - . 通过require require('/index.css') 报错如下 
 
 ```
-Module not found：Can't resolve '/index.css' in '/Users/ruanye/Desktop/webpacklesson/src
-
+You may need an appropriate loader to handle this file type.
+appropriate  合适的
+你可能需要一个合适的loader 
 ```
 - . 配置module,配置rules数组，表示很多规则，用正在匹配js、css等
+use后面的写法
+1. 字符串 只能写一个loader 
+use:'css-loader'
+2. 数组 可以写多个loader 
+use:['style-loader','css-loader']
+loader 的执行顺序是从右到左执行 从下到上 
 
 ```
  {
-     test:'/\.css/',//配置到css
+     test:'/\.css$/',//配置到css
      use:[]
  }
 ```
-- .use 可以直接写loader，也可以写对象，写对象的时候可以写配置
+- .use 可以直接写loader，也可以写成对象，写对象的时候可以进行配置
 yard add css-loader style-loader -D
 ```
  {
@@ -92,6 +99,10 @@ yard add css-loader style-loader -D
 ```
 - 配置less编译(less->css) 因为从右向左，从下到上执行 所以写在下边和右边
 yarn add less less-loader -D
+- 编译sass 
+node-sass sass-loader  -D
+- 编译stylus
+stylus stylus-loader   -D 
 
 ##  抽离css 
 - yarn add  mini-css-extract-plugin -D
@@ -99,6 +110,7 @@ yarn add less less-loader -D
   new MiniCssExtractPlugin({
       filename: 'main.css'
     })
+  用  MiniCssExtractPlugin.loader 代替style-loader 可以对css进行抽离 
 ```
 
 ## 使用postcss添加浏览器前缀 
@@ -150,6 +162,53 @@ require("@babel/polyfill");
 - exclude 不包含  exclude:/node_modules/
 
 ## babel 也可以独立进行配置，文件名字.babelrc
+## js语法校验 
+- yarn add eslint eslint-loader -D
+- eslint 官网 eslint.org
+- 添加enforce pre 强制先执行
+```
+{  
+  test:'/.js$/',
+  loader:'eslint-loader',
+   optiton:{
+     enfore:'pre'
+   }
+}
+```
+## 第三方模块的使用 
+- yarn add jquery 
+- expose-loader 暴露全局的loader
+内联loader 
+``` 
+    import $ from "expose-loader?$!jquery"
+``` 
+正常配置
+```
+{
+  test:require.resolve('jquery'),
+  loader:"expose-loader?$"
+}
+```
+在每个模块中注入$对象 在plugins配置
+```
+ new webpack.ProvidePlugin({
+      $:"jquery"
+    })
+```
+## 配置忽略打包项
+```
+externals:{
+    jquery:"jQuery"
+}
+```
+
+## 图片处理 
+file-loader 
+url-loader 
+html-withimg-loader
+
+
+
 
 
 
