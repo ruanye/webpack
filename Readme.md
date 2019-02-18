@@ -1,3 +1,4 @@
+## webpack 基础篇 
 ## webpack 安装 
 - 安装本地的webpack 
 - yarn add webpack webpack-cli -D  
@@ -193,6 +194,13 @@ require("@babel/polyfill");
 - yarn add eslint eslint-loader -D
 - eslint 官网 eslint.org
 - 添加enforce pre 强制先执行  previous  前置loader 
+- 另一种配置方法 .eslint.js  
+``
+module.expors={
+   //放代码 
+ };
+```
+ .eslintignore elsint的忽略项
 ```
 {
   test:'/\.js$/',
@@ -203,21 +211,27 @@ require("@babel/polyfill");
 }
 ```
 ## 第三方模块的使用 
-- yarn add jquery 
+- yarn add jquery  
+- yarn add expose-loader -D
 - expose-loader 暴露全局的loader
-内联loader 
+
+1. 内联loader的方式配置
 ``` 
-    import $ from "expose-loader?$!jquery"
+  import $ from "expose-loader?$!jquery"
 ``` 
-正常配置
+2. 正常loader配置
 ```
 {
   test:require.resolve('jquery'),
   loader:"expose-loader?$"
 }
 ```
-在每个模块中注入$对象 在plugins配置
+- 在每个模块中注入$对象 不需要引入可以直接使用$这里window.$是undefined  
+- 在plugins配置,ProvidePlugin webpack 自带插件
+- 自带插件都需要引入webpcak模块
 ```
+let webpack = require('webpack')
+...
  new webpack.ProvidePlugin({
       $:"jquery"
     })
@@ -275,7 +289,7 @@ html-withimg-loader
   new MiniCssExtractPlugin({
       filename:'css/main.css'
     })
-3. 添加域名
+3. 添加域名 publicPath的用法
 output: {
     filename: 'bundle.js', 
     path: path.resolve(__dirname, 'build'),
@@ -286,7 +300,7 @@ options:{
           limit:1,
           outputPath:'/img/',
           publicPath:'http://www.baidu.cn'
-        }
+ }
 
 
 

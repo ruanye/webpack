@@ -3,7 +3,8 @@ let path = require('path');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let MiniCssExtractPlugin  = require('mini-css-extract-plugin')
 let OptimizeCssAssetsWebpackplugin =require('optimize-css-assets-webpack-plugin')
-let UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin')
+let UglifyjsWebpackPlugin = require('uglifyjs-webpack-plugin');
+let webpack = require('webpack')
 //node和核心模块 路径模块 
 module.exports={
 	optimization:{
@@ -24,6 +25,9 @@ module.exports={
 		progress:true,
 		compress:true
 	 },
+	 externals:{
+		jquery:'jQuery' 
+	 },
 	 plugins:[
 		 new HtmlWebpackPlugin({
 			 template:'./src/index.html',
@@ -36,10 +40,14 @@ module.exports={
 		 }),
 		 new MiniCssExtractPlugin({
 			 filename:'main.css'
+		 }),
+		 new webpack.ProvidePlugin({
+			 $:'jquery'
 		 })
 	 ],
 	 module:{
 		 rules:[
+		
 		 {
           test:'/\.js$/',
           loader:'eslint-loader',
