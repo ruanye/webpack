@@ -40,8 +40,33 @@ module.exports={
 	 ],
 	 module:{
 		 rules:[
+		 {
+          test:'/\.js$/',
+          loader:'eslint-loader',
+          options:{
+             enforce:'pre'
+           }
+          },
 			 {
-				test:/.css$/,
+				test:/\.js$/,
+				use:{
+					loader:'babel-loader',
+					options:{
+						presets:['@babel/preset-env'],
+						plugins:[
+							 ["@babel/plugin-proposal-decorators", { "legacy": true }],
+                             ["@babel/plugin-proposal-class-properties", { "loose" : true }],
+							 '@babel/plugin-transform-runtime',
+							
+						]
+					}
+				},
+				include:path.resolve(__dirname,'src'),
+				exclude:/node_modules/
+
+			 },
+			 {
+				test:/\.css$/,
 				use:[
 				 MiniCssExtractPlugin.loader,
 				'css-loader',

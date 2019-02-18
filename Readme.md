@@ -47,7 +47,6 @@ production
 - 当有插件的时候需要配置plugins 插件集合类型是数组
 - 每一个插件都是通过new来调用，例：new HtmlWebpackPlugin()
 - 可以运行npm run dev/npm run build 查看结果
-
 ```
 {
   template:'./src/index.html',//模板
@@ -162,7 +161,10 @@ optimization: { 优化像
 - yarn add babel-loader @babel/core @babel/preset-env
 @babel/core babel 核心模块
 @babel-preset-env 标准语法转化成低级语法
-- class 和 es6@(装饰器需要安装额外的插件) 并且添加plugins集合
+- presets 预设 
+- 箭头函数 arrow-functions 
+- class等(装饰器需要安装额外的插件) 并且添加plugins集合
+- yarn add @babel/plugin-proposal-class-properties @babel/plugin-proposal-decorators
 ```
 {
   "plugins": [
@@ -171,31 +173,33 @@ optimization: { 优化像
   ]
 }
 ``` 
-- promise genarater 需要 @babel/plugin-transform-runtime
+- babel 插件中最常用的插件 
+promise genarater 需要 @babel/plugin-transform-runtime 
 yarn add  @babel/plugin-transform-runtime 
-生产环境也需要runtime 
+生产环境也需要runtime  不加-D 
 yarn add @babel/runtime 
-- es7的一些语法需要其他的 补丁包 
-yarn  @babel/polyfill
+- es7的一些语法需要其他的 例如：inclueds  补丁包 
+yarn add  @babel/polyfill
 require("@babel/polyfill");
 
-## 配置需要设置loader的文件路径  
+## 配置需要解析和不需要解析loader的文件路径  
 
 - include 包含  include:path.resolve(__dirname,'src'), 
 - exclude 不包含  exclude:/node_modules/
-
 ## babel 也可以独立进行配置，文件名字.babelrc
+- 配置的时候loader 直接写成 use:'babel-loader',其他配置写在.babelrc里面
+- 如果webpack options对babel-loader进行了配置 不需要.babelrc文件 如果有的就删除  
 ## js语法校验 
 - yarn add eslint eslint-loader -D
 - eslint 官网 eslint.org
-- 添加enforce pre 强制先执行
+- 添加enforce pre 强制先执行  previous  前置loader 
 ```
-{  
-  test:'/.js$/',
+{
+  test:'/\.js$/',
   loader:'eslint-loader',
-   optiton:{
-     enfore:'pre'
-   }
+  options:{
+     enforce:'pre'
+    }
 }
 ```
 ## 第三方模块的使用 
@@ -224,13 +228,65 @@ externals:{
     jquery:"jQuery"
 }
 ```
-
+## 在webpack中引入图片的几种方式
+1. 在js中创建图片来引入
+import logo from './logo.png';
+let img = new image ;
+img.src = logo
+document.body.appengChild(img)
+2. 在css 引入 background(url)
+3. <img src=''/>
 ## 图片处理 
+yarn add file-loader  html-withimg-loader url-loader -D
 file-loader 
+```
+{
+  test:/\.(png,jpg,gif)$/,
+  user:'file-loader'
+}
+```
+在html 引入图片打包会找不到文件 需要使用html-withimg-loader
 url-loader 
 html-withimg-loader
-
-
+```
+{
+  test:/\.html$/,
+  user:'html-withimg-loader'
+}
+```
+在图片非常小的情况下不希望走http请求，一般情况下不会直接使用
+在图片小于多少k的时候可以做一个限制，用base64来转化,base64大小会比原来文件大3分之一  
+{
+  test:/\.(png,jpg,gif)$/,
+  user:{
+    loder:'url-loader',
+    options:{
+      limit:1000
+    }
+  }
+}
+## 打包文件分类 
+1. 图片loader的options 里面添加
+ options:{
+      limit:1000
+       outputPath:'/img/',
+    }
+2. css 添加在css插件里面 
+  new MiniCssExtractPlugin({
+      filename:'css/main.css'
+    })
+3. 添加域名
+output: {
+    filename: 'bundle.js', 
+    path: path.resolve(__dirname, 'build'),
+    publicPath:'http://www.baidu.cn'
+  }
+如果只需要图片添加域名
+options:{
+          limit:1,
+          outputPath:'/img/',
+          publicPath:'http://www.baidu.cn'
+        }
 
 
 
