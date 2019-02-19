@@ -1,7 +1,11 @@
-import $ from "jquery"
-console.log($)
-console.log(window.$)
-// require('./index.css')
+ import logo from './vuex.jpg';
+let img  = new Image();
+img.src = logo;
+document.body.appendChild(img)
+// import $ from "jquery"
+// console.log($)
+// console.log(window.$)
+ require('./index.css')
 // require('@babel/polyfill')
 // let str = require('./a.js')
 // console.log(str)

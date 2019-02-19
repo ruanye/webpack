@@ -1,4 +1,5 @@
 ## webpack 基础篇 
+
 ## webpack 安装 
 - 安装本地的webpack 
 - yarn add webpack webpack-cli -D  
@@ -248,6 +249,11 @@ import logo from './logo.png';
 let img = new image ;
 img.src = logo
 document.body.appengChild(img)
+会在内存里面创建一个新的图片 
+```
+You may need an appropriate loader to handle this file type
+你需要一个合适的loader去处理这个文件类型
+```
 2. 在css 引入 background(url)
 3. <img src=''/>
 ## 图片处理 
@@ -270,6 +276,7 @@ html-withimg-loader
 ```
 在图片非常小的情况下不希望走http请求，一般情况下不会直接使用
 在图片小于多少k的时候可以做一个限制，用base64来转化,base64大小会比原来文件大3分之一  
+limit 限制图片大小多大以内转成base64
 {
   test:/\.(png,jpg,gif)$/,
   user:{
@@ -279,11 +286,32 @@ html-withimg-loader
     }
   }
 }
+- url-loader 可以处理mp4|webm|ogg|mp3|wav|flac|aac  
+- url-loder 可以处理各种字体格式 woff2?|eot|ttf|otf
+```
+{
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('media/[name].[hash:7].[ext]')
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+        }
+      }
+```
+
 ## 打包文件分类 
 1. 图片loader的options 里面添加
  options:{
       limit:1000
-       outputPath:'/img/',
+      outputPath:'/img/',
     }
 2. css 添加在css插件里面 
   new MiniCssExtractPlugin({

@@ -17,7 +17,8 @@ module.exports={
 	entry:'./src/index.js',
 	output:{
 	  path:path.resolve(__dirname,'dist'),
-	  filename:'bundle[hash:6].js'
+	  filename:'bundle[hash:6].js',
+	//   publicPath:'http://www.baidu.com'
 	 },
 	 devServer:{
 		port:'3000',
@@ -39,7 +40,7 @@ module.exports={
 			 }
 		 }),
 		 new MiniCssExtractPlugin({
-			 filename:'main.css'
+			 filename:'css/main.css'
 		 }),
 		 new webpack.ProvidePlugin({
 			 $:'jquery'
@@ -47,7 +48,21 @@ module.exports={
 	 ],
 	 module:{
 		 rules:[
-		
+	      {
+			  test:/\.html$/,
+			  use:'html-withimg-loader'
+		  },
+		  {
+			test:/\.(jpg|png|gif)$/,
+			use:{
+				loader:'url-loader',
+				options:{
+					limit:1,
+					outputPath:'img/',
+					publicPath:'http://www.baidu.com/'
+				}
+			} 
+		  },
 		 {
           test:'/\.js$/',
           loader:'eslint-loader',
