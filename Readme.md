@@ -201,12 +201,7 @@ require("@babel/polyfill");
 - eslint 官网 eslint.org
 - 添加enforce pre 强制先执行  previous  前置loader 
 - 另一种配置方法 .eslint.js  
-``
-module.expors={
-   //放代码 
- };
-```
- .eslintignore elsint的忽略项
+- .eslintignore elsint的忽略项
 ```
 {
   test:'/\.js$/',
@@ -271,18 +266,16 @@ file-loader
   user:'file-loader'
 }
 ```
-在html 引入图片打包会找不到文件 需要使用html-withimg-loader
-url-loader 
-html-withimg-loader
+- 在html 引入图片打包会找不到文件 需要使用html-withimg-loader
 ```
 {
   test:/\.html$/,
   user:'html-withimg-loader'
 }
 ```
-在图片非常小的情况下不希望走http请求，一般情况下不会直接使用
-在图片小于多少k的时候可以做一个限制，用base64来转化,base64大小会比原来文件大3分之一  
-limit 限制图片大小多大以内转成base64
+- 在图片非常小的情况下不希望走http请求，一般情况下不会直接使用file-loader 通常我们使用url-loader
+- 在图片小于多少k的时候可以做一个限制，用base64来转化,base64大小会比原来文件大3分之一  
+- limit 限制图片大小多大以内转成base64
 {
   test:/\.(png,jpg,gif)$/,
   user:{
@@ -331,7 +324,7 @@ output: {
     path: path.resolve(__dirname, 'build'),
     publicPath:'http://www.baidu.cn'
   }
-如果只需要图片添加域名
+- 如果只需要图片添加域名
 options:{
           limit:1,
           outputPath:'/img/',
