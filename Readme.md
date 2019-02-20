@@ -77,6 +77,11 @@ appropriate  合适的
 你可能需要一个合适的loader 
 ```
 - . 配置module,配置rules数组，表示很多规则，用正在匹配js、css等
+```
+module:{
+  rules:[]
+}
+```
 use后面的写法
 1. 字符串 只能写一个loader 
 use:'css-loader'
@@ -255,7 +260,8 @@ You may need an appropriate loader to handle this file type
 你需要一个合适的loader去处理这个文件类型
 ```
 2. 在css 引入 background(url)
-3. <img src=''/>
+
+3. <img src=''/>  需要把图片放到dist文件夹
 ## 图片处理 
 yarn add file-loader  html-withimg-loader url-loader -D
 file-loader 
@@ -317,7 +323,9 @@ limit 限制图片大小多大以内转成base64
   new MiniCssExtractPlugin({
       filename:'css/main.css'
     })
-3. 添加域名 publicPath的用法
+3. js添加到filename 前面
+ filename:'js/main[hash].js',
+4. 添加域名 publicPath的用法
 output: {
     filename: 'bundle.js', 
     path: path.resolve(__dirname, 'build'),
