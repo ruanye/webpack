@@ -31,6 +31,16 @@
 - output 出口 输出 
    - path 输出路径 必须是绝对路径
    - filename: 输出的文件名字
+```
+module.exports={
+  entry:'./src/index.js',
+	output:{
+	  path:path.resolve(__dirname,'dist'),
+	  filename:'bundle[hash:6].js',
+	  publicPath:'http://www.baidu.com'
+	 }
+}
+```
 
 ## * 配置打包环境  
 - mode 的值  2个值 development和 
@@ -38,6 +48,12 @@ production
  1. development 开发环境
  2. production 生产环境 
 
+```
+module.exports={
+  mode:'development',
+  ...
+}
+```
 
 ## * 开发服务器配置
 - yarn add webpack-dev-server -D
@@ -398,17 +414,18 @@ file-loader
     })
 3. js添加到filename 前面
  filename:'js/main[hash].js',
-4. 添加域名 publicPath的用法
+4. 添加域名 publicPath的用法  
  output: {
     filename: 'bundle.js', 
     path: path.resolve(__dirname, 'build'),
-     publicPath:'http://www.baidu.cn'
-  }
+      publicPath:'http://www.baidu.cn'
+     }
+
 - 如果只需要图片添加域名
 options:{
-          limit:1,
-          outputPath:'/img/',
-          publicPath:'http://www.baidu.cn' 
+    limit:1,
+    outputPath:'/img/',
+    publicPath:'http://www.baidu.cn' 
  }
 
 
