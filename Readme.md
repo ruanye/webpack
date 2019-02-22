@@ -318,6 +318,13 @@ externals:{
 }
 ```
 ## 在webpack中引入图片的几种方式
+- src 
+  - index.js
+  - style.css
+  - b.less
+  - index.html 
+  - logo.png
+ 
 1. 在js中创建图片来引入
 import logo from './logo.png';
 let img = new image ;
