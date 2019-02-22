@@ -5,54 +5,68 @@
 - yarn add webpack webpack-cli -D  
 - -D 表示development  开发环境 
 
-## webpack 可以进行0配置
-- 创建src文件夹 src目录下创建index.js
+## webpack 可以进行0配置 
+- 目录结构
+  - src 
+     - index.js 
+
 - 直接运行 npx webpack 
 - 打包工具->输出后的结果(js模块)
 - 打包（直接js的模块化）
 
 
 ## 手动配置webpack 
-- 默认配置文件的名字是webpack.config.js
+- [x] 默认配置文件的名字是webpack.config.js/webpackfile.js 通常使用webpack.config.js 
 - webpack 是基于node编写的
 
-## 配置脚本命令 package.json 
+## * 配置脚本命令 package.json 
+- -- config  指定默认文件是哪个
 - "build": "webpack --config webpack.config.js",
 - "dev": "webpack-dev-server"
+- "start":"npm run dev"
 - 这样就可以通过npm run dev/npm run build执行相关的命令
 
-## 配置出口入口
+## * 配置出口入口
 - entry 入口 可以是相对路径 
 - output 出口 输出 
    - path 输出路径 必须是绝对路径
    - filename: 输出的文件名字
 
-## 配置打包环境  
-- mode 的值 一般是2个值 development和 
+## * 配置打包环境  
+- mode 的值  2个值 development和 
 production 
  1. development 开发环境
  2. production 生产环境 
-如果不配置，默认是生产环境 
 
-## 开发服务器配置
+
+## * 开发服务器配置
 - yarn add webpack-dev-server -D
 ```
- port:3000, #端口号
- progress:true, #显示进度条
- contentBase:'./dist', #目录
- compress:true  #是否开启gzip压缩
+devServer:{
+  port:3000, #端口号
+  contentBase:'./dist', #目录
+  open:true, #是否自动打开浏览器
+  progress:true, #显示进度条
+  compress:true  #是否开启gzip压缩
+  proxy:{
+    //可以配置跨域
+  }
+ }
 ```
 
 ## 处理html 
--  yarn add  html-webpack-plugin -D 
-- 在src目录下面建一个index.html
+- src 
+  - index.js
+  - index.html 
+
+- [x] yarn add  html-webpack-plugin -D 
 - 当有插件的时候需要配置plugins 插件集合类型是数组
 - 每一个插件都是通过new来调用，例：new HtmlWebpackPlugin()
 - 可以运行npm run dev/npm run build 查看结果
 ```
 {
-  template:'./src/index.html',//模板
-  filename:'index.html', //编译后的文件名 
+  * template:'./src/index.html',//模板
+  * filename:'index.html', //编译后的文件名 
   hash:true,//加hash值 
   minify:{ //压缩配置   
     removeAttributeQuotes:true, //去除双引号
@@ -69,33 +83,41 @@ filename:'bundle[hash:8].js'
 ```
 
 ## 处理样式
-- . 通过require require('/index.css') 报错如下 
-
+- src 
+  - index.html
+  - index.js
+  - style.css 
+  
+- . index.js 通过require require('/style.css') 报错如下 
 ```
-You may need an appropriate loader to handle this file type.
+You may need an appropriate loader to handle this file type
 appropriate  合适的
 你可能需要一个合适的loader 
 ```
-- . 配置module,配置rules数组，表示很多规则，用正在匹配js、css等
+- . 配置module,配置rules数组，表示很多规则，用正在匹配js、css等,rules里面配置不容的loader,每个loader的配置都是一个对象 
 ```
 module:{
   rules:[]
 }
 ```
-use后面的写法
+loader的配置方法 test 匹配规则 use 使用什么loader 
+- use的用法
 1. 字符串 只能写一个loader 
 use:'css-loader'
-2. 数组 可以写多个loader 
+2. 数组 可以写多个loader 数组里面可以放字符串和对象
 css-loader 解析require/import 语法
 style-loader 把css插入到header标签中 
+
 use:['style-loader','css-loader']
 loader 的执行顺序是从右到左执行 从下到上 
 
 ```
+rules:[
  {
-     test:'/\.css$/',//配置到css
+     test:'/\.css$/',//匹配以css结尾的文件
      use:[]
  }
+]
 ```
 - .use 可以直接写loader，也可以写成对象，写对象的时候可以进行配置
 yard add css-loader style-loader -D
@@ -106,24 +128,41 @@ yard add css-loader style-loader -D
      insertAt:'top'  //css 放置位置可以决定css的优先级
   }
 ```
+
+- src 
+  - index.html
+  - index.js
+  - style.css 
+  - b.less
+
 - 配置less编译(less->css) 因为从右向左，从下到上执行 所以写在下边和右边
 yarn add less less-loader -D
 - 编译sass 
 node-sass sass-loader  -D
 - 编译stylus
 stylus stylus-loader   -D 
+``` 
+  {
+    test:/\.less$/,
+    use:[
+       'style-loader',
+       'css-loader',
+       'less-loader'
+    ]
+ }
+```
 
 ##  抽离css 
-- yarn add  mini-css-extract-plugin -D
--  MiniCssExtractPlugin插件自带一个loader
-- MiniCssExtractPlugin.loader会自动把css抽离出来 
+- [x] yarn add  mini-css-extract-plugin -D
+- MiniCssExtractPlugin插件自带一个loader
+- MiniCssExtractPlugin.loader会自动把css抽离出来 作为引用的方式引入页面
 ```
   new MiniCssExtractPlugin({
       filename: 'main.css' ##抽离出来的css的文件名
     })
   
 ```
-- 在loader里面的写法
+- [x] 在loader里面的写法
 ```
   {
     test:/.css$/,
@@ -133,26 +172,40 @@ stylus stylus-loader   -D
 ```
 
 ## 使用postcss-loader,autoprefixer添加浏览器前缀 
-- yarn add postcss-loader autoprefixer -D 
+- [x] yarn add postcss-loader autoprefixer -D 
+```
+{
+  test:/\.less$/,
+  use:[
+     MiniCssExtractPlugin.loader,
+    'css.loader',
+    'less-loader',
+    'postcss-loader'
+  ]
+}
+```
+
 - 放到所有cssloader后面，执行顺序原因
 ```
  npm run dev 的时候会报错
  Error: No PostCSS Config found in: /Users/ruanye/Desktop/project/src
  没有找到postcss的默认文件 
 ```
-- 需要配置postcss默认文件 名字
+- [x] 需要配置postcss默认文件 名字
 在根目录下创建 postcss.config.js
+- [x] postcss.config.js 文件里面的内容：
 ```
-postcss.config.js 文件里面的内容：
-module.exports={
+ module.exports={
     plugins:[require('autoprefixer')]
-}
+  }
 ```
 
-## 配置优化项
+## * 配置优化项
 - yarn add optimize-css-assets-webpack-plugin  uglifyjs-webpack-plugin -D 
-optimize : 优化 assets :资源 
-optimization: { 优化像 
+optimize : 优化  assets :资源 
+
+```
+optimization: { 优化
     minimizer: [
       new UglifyJsPlugin({
         cache: true, //缓存 
@@ -161,11 +214,13 @@ optimization: { 优化像
       }),
       new OptimizeCSSAssetsPlugin({})
     ]
-  },
-- mode 改成production 
+  }
+```
+- mode 改成 production 
 - npm run build 打包之后 csss是压缩过的
 ## 处理js es6转化成es5
-- yarn add babel-loader @babel/core @babel/preset-env
+- [x] yarn add babel-loader @babel/core @babel/preset-env
+
 @babel/core babel 核心模块
 @babel-preset-env 标准语法转化成低级语法
 - presets 预设 
@@ -182,24 +237,43 @@ optimization: { 优化像
 ``` 
 - babel 插件中最常用的插件 
 promise genarater 需要 @babel/plugin-transform-runtime 
-yarn add  @babel/plugin-transform-runtime 
+- [x] yarn add  @babel/plugin-transform-runtime 
 生产环境也需要runtime  不加-D 
 yarn add @babel/runtime 
 - es7的一些语法需要其他的 例如：inclueds  补丁包 
-yarn add  @babel/polyfill
-require("@babel/polyfill");
+yarn add @babel/polyfill
+require("@babel/polyfill")
 
 ## 配置需要解析和不需要解析loader的文件路径  
-
-- include 包含  include:path.resolve(__dirname,'src'), 
-- exclude 不包含  exclude:/node_modules/
+- [x] include 包含  include:path.resolve(__dirname,'src'), 
+- [x] exclude 不包含  exclude:/node_modules/
+```
+{
+       test:/\.js$/,
+				use:{
+					loader:'babel-loader',
+					options:{
+            ...
+          },
+				  include:path.resolve(__dirname,'src'),
+			  	exclude:/node_modules/
+        }
+```
 ## babel 也可以独立进行配置，文件名字.babelrc
 - 配置的时候loader 直接写成 use:'babel-loader',其他配置写在.babelrc里面
+```
+ {
+   presets:['@babel/preset-env'],
+   plugins:[
+     ....
+   ]
+ }
+```
 - 如果webpack options对babel-loader进行了配置 不需要.babelrc文件 如果有的就删除  
 ## js语法校验 
 - yarn add eslint eslint-loader -D
 - eslint 官网 eslint.org
-- 添加enforce pre 强制先执行  previous  前置loader 
+- [x] 添加enforce pre 强制先执行  previous  前置loader 
 - 另一种配置方法 .eslint.js  
 - .eslintignore elsint的忽略项
 ```
@@ -266,22 +340,22 @@ file-loader
   user:'file-loader'
 }
 ```
-- 在html 引入图片打包会找不到文件 需要使用html-withimg-loader
+- [x] 在html 引入图片打包会找不到文件 需要使用html-withimg-loader
 ```
 {
   test:/\.html$/,
   user:'html-withimg-loader'
 }
 ```
-- 在图片非常小的情况下不希望走http请求，一般情况下不会直接使用file-loader 通常我们使用url-loader
-- 在图片小于多少k的时候可以做一个限制，用base64来转化,base64大小会比原来文件大3分之一  
+- [x] 在图片非常小的情况下不希望走http请求，一般情况下不会直接使用file-loader 通常我们使用url-loader
+- 在图片小于多少k的时候可以做一个限制，用base64来转化,base64大小会比原来文件大3分之1  
 - limit 限制图片大小多大以内转成base64
 {
   test:/\.(png,jpg,gif)$/,
   user:{
     loder:'url-loader',
     options:{
-      limit:1000
+      limit:10000 表示多少字节  1024 字节是1kb 
     }
   }
 }
@@ -289,24 +363,23 @@ file-loader
 - url-loder 可以处理各种字体格式 woff2?|eot|ttf|otf
 ```
 {
-        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+     test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('media/[name].[hash:7].[ext]')
         }
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+          limit: 10000
+         
         }
       }
 ```
 
-## 打包文件分类 
+## * 打包文件分类 
 1. 图片loader的options 里面添加
  options:{
       limit:1000
@@ -319,16 +392,16 @@ file-loader
 3. js添加到filename 前面
  filename:'js/main[hash].js',
 4. 添加域名 publicPath的用法
-output: {
+ output: {
     filename: 'bundle.js', 
     path: path.resolve(__dirname, 'build'),
-    publicPath:'http://www.baidu.cn'
+     publicPath:'http://www.baidu.cn'
   }
 - 如果只需要图片添加域名
 options:{
           limit:1,
           outputPath:'/img/',
-          publicPath:'http://www.baidu.cn'
+          publicPath:'http://www.baidu.cn' 
  }
 
 
