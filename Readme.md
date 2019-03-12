@@ -11,7 +11,7 @@
      - index.js 
 
 - 直接运行 npx webpack 
-- 打包工具->输出后的结果(js模块)
+- 打包工具 -> 输出后的结果(js模块)
 - 打包（直接js的模块化）
 
 
@@ -25,6 +25,7 @@
 - "dev": "webpack-dev-server"
 - "start":"npm run dev"
 - 这样就可以通过npm run dev/npm run build执行相关的命令
+
 
 ## * 配置出口入口
 - entry 入口 可以是相对路径 
@@ -479,8 +480,46 @@ watchOptions:{
  let webpack = require('webpack')
  new webpack.BannerPlugin('make 2019 by ry')
 
-## webpcak 处理跨域问题 
+## webpack处理 跨域问题
+- webpack 自带express
+1. *代理的方式  重写的方式 把请求代理到express服务器上 
+- target 访问http://localhost:3000 等于访问 当前服务器下面 '/api' 
+- pathRewrite 重写路径 /api/user 等于访问 localhost:3000/user
+```
+ devServer:{
+ ...
+ proxy:{ // 
+      '/api':{
+         target:'http://localhost:3000',
+         pathRewrite:{'/api':''}
+       }// 配置了一个代理
+   } 
+}
+```
+2.  直接使用webpack提供mock数据
+- webpack 提供一个方法 before
+- 参数是app app 就是 let app= express()
+```
+   before(app){  
+       app.get('/user',(req,res)=>{
+         res.json({name:'leilei'})
+       })
+    }
+```
+3. 可以直接在node的服务端启动webpack 端口是服务端端口 不在需要npm run dev 来启动webpack 
+- yarn add webpack-dev-middleware -D
+server.js修改如下 
+```
+let webpack = require('webpack');
 
+let middle = require('webpack-dev-middleware');
+
+let config = require('./webpack.config.js');
+
+let compiler = webpack(config);
+
+app.use(middle(compiler));
+```
 
 
 ## resolve用法
